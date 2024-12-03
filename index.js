@@ -38,13 +38,45 @@ async function Main() {
             res.send(result)
         })
 
-        // update
-        app.get('/schedule/:id', async(req,res)=>{
+        // find one data for update
+        app.get('/schedule/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await gymSchedule.findOne(query);
             res.send(result);
         })
+
+        // update
+        app.patch('/schedule/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body;
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    title: data.title,
+                    day: data.day,
+                    week: data.week,
+                    formattedTime: data.formattedTime
+                }
+            }
+            const result = await gymSchedule.updateOne(query, update);
+            res.send(result)
+        })
+
+        // update status
+        app.patch('/status/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body;
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    isComplete: true
+                }
+            }
+            const result = await gymSchedule.updateOne(query, update);
+            res.send(result)
+        })
+
 
         // delete
         app.delete('/schedule/:id', async (req, res) => {
