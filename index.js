@@ -34,7 +34,16 @@ async function Main() {
 
         // read
         app.get('/schedule', async (req, res) => {
-            const result = await gymSchedule.find().toArray();
+            const { searchParams } = req.query;
+
+            let option = {};
+
+            if (searchParams) {
+                option = { title: { $regex: searchParams, $options: "i" } }
+            }
+
+
+            const result = await gymSchedule.find(option).toArray();
             res.send(result)
         })
 
